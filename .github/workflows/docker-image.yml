@@ -1,7 +1,8 @@
 name: Docker Image CI
 
+#esta accion se va a disparar cada vez que se hace un push o un pull_request a la rama "main"
 on:
-  push:
+  push: 
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
