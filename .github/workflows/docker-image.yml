@@ -15,13 +15,13 @@ jobs:
 
     steps:
     
-    - name: Checkout code #step Checkout code
+    - name: Checkout code #step Checkout code: este step toma todo el código que tengo en el repositorio
       uses: actions/checkout@v3
       with:
         fetch-depth: 0
         
         
-    - name: Git Semantic Version #step Git Semantic Version
+    - name: Git Semantic Version #step Git Semantic Version: este step genera versiones semanticas nuevas cuando se hace un commit
       uses: PaulHatch/semantic-version@v4.0.3
       with:
         major_pattern: "major:"
@@ -30,18 +30,17 @@ jobs:
       id: gitSemanticVersionResult #sirve para poder hacer referencia al resultado de este step desde otro step
     
     
-    - name: Docker login #step Docker login
+    - name: Docker login #step Docker login: este step permite logearnos en dockerhub
       env:
         DOCKER_USER: ${{secrets.DOCKER_USER}}
         DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
-        
       run: |
         echo "Iniciando login"
         docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
         echo "Fin login"
         
         
-    - name: Build docker image #step Build docker image
+    - name: Build docker image #step Build docker image: este step crea la imagen de la aplicacion
       env:
         NEW_VERSION: ${{steps.gitSemanticVersionResult.outputs.version}}
       run: |
@@ -49,7 +48,7 @@ jobs:
         docker build -t matidocker23/docker-graphql:latest .
         
         
-    - name: Push docker image #step Push docker image
+    - name: Push docker image #step Push docker image: este step sube la imagen creada en el step anterior a dockerhub
       env:
         NEW_VERSION: ${{steps.gitSemanticVersionResult.outputs.version}}
       run: |
